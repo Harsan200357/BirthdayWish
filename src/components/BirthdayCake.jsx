@@ -8,103 +8,150 @@ const BirthdayCake = ({ onComplete }) => {
 
   const extinguishCandle = (index) => {
     if (!candles[index]) return;
-    
+
     const newCandles = [...candles];
     newCandles[index] = false;
     setCandles(newCandles);
-    
-    // Smoke effect?
   };
 
   useEffect(() => {
     if (candles.every(c => !c) && !wished) {
       setWished(true);
       confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ['#ff0000', '#ff4081', '#ffffff'] // Valentine colors
       });
       setTimeout(() => {
         onComplete();
-      }, 2000);
+      }, 2500);
     }
   }, [candles, wished, onComplete]);
 
   return (
     <div className="cake-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '2rem' }}>
-      <h2 style={{ fontFamily: 'var(--font-cursive)', fontSize: '3rem', marginBottom: '2rem', color: 'var(--color-primary)' }}>
-        Make a Wish & Blow the Candles!
+      <h2 style={{
+        fontFamily: 'var(--font-cursive)',
+        fontSize: '3.5rem',
+        marginBottom: '2rem',
+        color: '#d32f2f',
+        textShadow: '2px 2px 4px rgba(0,0,0,0.1)'
+      }}>
+        Make a Wish, My Love! ❤️
       </h2>
-      <p style={{marginBottom: '2rem', opacity: 0.7}}>(Click/Tap the flames)</p>
-      
-      <div style={{ position: 'relative', marginTop: '50px' }}>
-        {/* Cake Layers */}
-        <div style={{
-          width: '250px',
-          height: '80px',
-          backgroundColor: '#f8bbd0',
-          borderRadius: '10px 10px 0 0',
-          position: 'relative',
-          boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-        }}></div>
-         <div style={{
-          width: '300px',
-          height: '100px',
-          backgroundColor: '#f48fb1',
-          borderRadius: '10px 10px 0 0',
-          position: 'relative',
-          top: '-10px',
-          zIndex: 0,
-           boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-        }}></div>
+      <p style={{ marginBottom: '3rem', fontSize: '1.2rem', color: '#880e4f' }}>(Blow out the candles by tapping them)</p>
 
-        {/* Candles */}
+      <div style={{ position: 'relative', marginTop: '60px' }}>
+
+        {/* Cake Base Layer */}
+        <div style={{
+          width: '300px',
+          height: '120px',
+          background: 'linear-gradient(to right, #e91e63, #ad1457)',
+          borderRadius: '20px 20px 10px 10px',
+          position: 'relative',
+          boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'flex-start'
+        }}>
+          {/* Icing Drips */}
+          <div style={{
+            position: 'absolute', top: 0, width: '100%', height: '40px',
+            background: 'repeating-linear-gradient(45deg, #f8bbd0, #f8bbd0 10px, #fce4ec 10px, #fce4ec 20px)',
+            borderRadius: '20px 20px 0 0',
+            opacity: 0.9
+          }}></div>
+          {/* Decorative Hearts */}
+          <div style={{ fontSize: '2rem', marginTop: '40px', display: 'flex', gap: '20px' }}>
+            <span>❤️</span><span>💖</span><span>❤️</span>
+          </div>
+        </div>
+
+        {/* Cake Top Layer */}
+        <div style={{
+          width: '240px',
+          height: '90px',
+          background: 'linear-gradient(to right, #f06292, #ec407a)',
+          borderRadius: '20px 20px 0 0',
+          position: 'absolute',
+          top: '-90px',
+          left: '30px', // Centered relative to 300px base
+          zIndex: 5,
+          boxShadow: '0 5px 15px rgba(0,0,0,0.15)'
+        }}>
+          {/* Icing */}
+          <div style={{
+            position: 'absolute', top: 0, width: '100%', height: '25px',
+            background: '#fff',
+            borderRadius: '20px 20px 50% 50%',
+            opacity: 0.8
+          }}></div>
+        </div>
+
+        {/* Candles Container */}
         <div style={{
           position: 'absolute',
-          top: '-40px',
-          left: '25px', // Center align roughly
+          top: '-130px',
+          left: '55px', // Adjusted to center on top layer
           display: 'flex',
-          gap: '20px',
+          gap: '25px',
           zIndex: 10
         }}>
           {candles.map((isLit, i) => (
-             <div key={i} style={{ position: 'relative', width: '20px' }}>
-                {/* Flame */}
-                {isLit && (
-                  <motion.div
-                    animate={{ scale: [1, 1.2, 1], rotate: [-5, 5, -5] }}
-                    transition={{ duration: 0.5, repeat: Infinity }}
-                    onClick={() => extinguishCandle(i)}
-                    style={{
-                      width: '20px',
-                      height: '30px',
-                      backgroundColor: '#ff9800',
-                      borderRadius: '50% 50% 20% 20%',
-                      position: 'absolute',
-                      top: '-35px',
-                      left: '0',
-                      cursor: 'pointer',
-                      boxShadow: '0 0 10px #ffeb3b, 0 0 20px #ff9800',
-                      filter: 'blur(1px)'
-                    }}
-                  />
-                )}
-                {!isLit && (
-                    <div style={{
-                        position: 'absolute', top: '-15px', left: '8px', 
-                        width: '4px', height: '15px', background: '#ccc'
-                    }} />
-                )}
-                
-                {/* Candle Stick */}
-                <div style={{
-                  width: '20px',
-                  height: '60px',
-                  background: 'repeating-linear-gradient(45deg, #fff, #fff 5px, #2196f3 5px, #2196f3 10px)',
-                  borderRadius: '4px',
-                  boxShadow: 'inset 0 -5px 2px rgba(0,0,0,0.1)'
-                }}></div>
-             </div>
+            <div key={i} style={{ position: 'relative', width: '20px' }}>
+              {/* Flame */}
+              {isLit && (
+                <motion.div
+                  animate={{
+                    scale: [1, 1.3, 1],
+                    rotate: [-2, 2, -2],
+                    filter: ['brightness(1)', 'brightness(1.5)', 'brightness(1)']
+                  }}
+                  transition={{ duration: 0.4, repeat: Infinity, ease: "easeInOut" }}
+                  onClick={() => extinguishCandle(i)}
+                  style={{
+                    width: '24px',
+                    height: '36px',
+                    background: 'radial-gradient(ellipse at bottom, #ffee58, #ff6f00)',
+                    borderRadius: '50% 50% 35% 35%',
+                    position: 'absolute',
+                    top: '-40px',
+                    left: '-2px',
+                    cursor: 'pointer',
+                    boxShadow: '0 0 15px #ffeb3b, 0 0 30px #ff9800',
+                    filter: 'blur(0.5px)',
+                    zIndex: 20
+                  }}
+                />
+              )}
+
+              {/* Smoke when out */}
+              {!isLit && (
+                <motion.div
+                  initial={{ opacity: 0, y: 0 }}
+                  animate={{ opacity: [0, 0.8, 0], y: -30, x: [0, 10, -5, 8] }}
+                  transition={{ duration: 1.5 }}
+                  style={{
+                    position: 'absolute', top: '-25px', left: '8px',
+                    fontSize: '20px', color: '#999', pointerEvents: 'none'
+                  }}
+                >
+                  ☁️
+                </motion.div>
+              )}
+
+              {/* Candle Stick */}
+              <div style={{
+                width: '20px',
+                height: '60px',
+                background: 'repeating-linear-gradient(90deg, #ffd700, #ffe082 50%, #ffd700 100%)', // Gold candles
+                borderRadius: '4px',
+                boxShadow: 'inset 0 -2px 5px rgba(0,0,0,0.2)',
+                border: '1px solid #c79100'
+              }}></div>
+            </div>
           ))}
         </div>
       </div>
